@@ -19,5 +19,11 @@ pipeline {
                 
             }
         }
+        stage('Release') { 
+            steps {
+		 echo "Releasing the project........"
+                
+            }
+        }
     }
 }
