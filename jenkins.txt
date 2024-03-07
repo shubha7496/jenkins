@@ -1,0 +1,33 @@
+pipeline{
+    agent any
+    tools{
+        maven 'maven'
+    }
+    stages{
+        stage('Build Maven'){
+            steps{
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/shubha7496/loginpage']])
+                bat 'mvn clean install'
+            }
+        }
+        stage('Build docker image'){
+            steps{
+                script{
+                    bat 'docker build -t shubham7489/docker-demo .'
+                }
+            }
+        }
+       stage('Push image to Hub') {
+           steps{
+               script{
+                  withDockerRegistry(credentialsId: 'test', url: 'https://registry.hub.docker.com/') {
+                   bat "docker push shubham7489/docker-demo:latest"
+                  }
+}
+           }
+        }
+
+
+}
+
+    }
